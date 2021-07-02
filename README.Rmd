@@ -11,12 +11,12 @@ remotes::install_github("saramortara/tRiviascoRe")
 library(tRiviascoRe)
 ```
 
-```{r, echo=F}
+```{r, echo=F, message=FALSE}
 devtools::load_all()
 ```
 
 
-```{r}
+```{r, message=FALSE}
 library(tidyr)
 library(dplyr)
 library(readr)
@@ -35,7 +35,7 @@ library(gsheet)
 
 Provide a path to spreadsheet that is the output of a google form
 
-```{r}
+```{r, message=F}
 # Path to the google form
 data <- "https://docs.google.com/spreadsheets/d/1yDHG41aGnb2hEUEKo6gmsoeWIBaQuv6uf-tDE0J4XbI/edit?usp=sharing"
 data <- read_csv(construct_download_url(data))

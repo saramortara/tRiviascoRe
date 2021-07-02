@@ -8,25 +8,9 @@ remotes::install_github("saramortara/tRiviascoRe")
 library(tRiviascoRe)
 ```
 
-    ## Loading tRiviascoRe
-
 ``` r
 library(tidyr)
 library(dplyr)
-```
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-``` r
 library(readr)
 library(gsheet)
 ```
@@ -55,17 +39,6 @@ data <- read_csv(construct_download_url(data))
     ## => 'What is the name of this actor?_1' [4], 'What is the name of this actor?'
     ## => 'What is the name of this actor?_2' [5], 'What is the name of this actor?' =>
     ## 'What is the name of this actor?_3' [6]
-
-    ## 
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## cols(
-    ##   `Carimbo de data/hora` = col_character(),
-    ##   `FILL OUT THE NAME OF YOUR TEAM:` = col_character(),
-    ##   `What is the name of this actor?` = col_character(),
-    ##   `What is the name of this actor?_1` = col_character(),
-    ##   `What is the name of this actor?_2` = col_character(),
-    ##   `What is the name of this actor?_3` = col_character()
-    ## )
 
 ``` r
 # Vector of scores for each round
