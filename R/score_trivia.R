@@ -8,6 +8,7 @@
 #' @export
 #'
 #' @importFrom lubridate dmy_hms
+#' @importFrom rlang .data
 #' @import dplyr
 #' @importFrom readr read_csv
 #' @importFrom magrittr %>%
@@ -24,18 +25,18 @@ score_trivia <- function(data, n_round = NULL, score, ref){
   # Checking if there's only one form per team
   ## if more than one, we'll pick the
   last_form <- data %>%
-    group_by(team_name) %>%
-    summarise(last = max(timestamp))
+    group_by(.data$team_name) %>%
+    summarise(last = max(.data$timestamp))
 
   # Filtering only the last form for each team
   data <- data %>%
-    filter(team_name %in% last_form$team_name & timestamp %in% last_form$last)
+    filter(.data$team_name %in% last_form$team_name & .data$timestamp %in% last_form$last)
 
   # Checking if answer matches responses ---------------------------------------
 
   #if (!is.null(n_round)) {
     ref_round <- ref %>%
-      filter(round == n_round) %>%
+      filter(.data$round == n_round) %>%
       select("question_name", "correct_answer")
   #}
 

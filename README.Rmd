@@ -77,4 +77,17 @@ score_list
 ```
 
 
+Binding the list into a single data frame
+
+```{r}
+res <- bind_rows(score_list, .id = "round")
+```
+
+
+Getting the final score:
+
+```{r}
+rank_teams(res)
+
+```
 

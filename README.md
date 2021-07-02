@@ -90,3 +90,21 @@ score_list
     ## 1 ZOOM BREAKOUT ROOM 1     4
     ## 2 ZOOM BREAKOUT ROOM 2     0
     ## 3 ZOOM BREAKOUT ROOM 3     0
+
+Binding the list into a single data frame
+
+``` r
+res <- bind_rows(score_list, .id = "round")
+```
+
+Getting the final score:
+
+``` r
+rank_teams(res)
+```
+
+    ## Third place: ZOOM BREAKOUT ROOM 3 Score: 2 🥉
+
+    ## Second place: ZOOM BREAKOUT ROOM 2 Score: 3 🥈
+
+    ## Firt place: ZOOM BREAKOUT ROOM 1 Score: 7 🥇
