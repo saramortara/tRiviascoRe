@@ -14,13 +14,12 @@
 #' @importFrom magrittr %>%
 #' @importFrom gsheet construct_download_url
 #'
-score_trivia <- function(data, n_round = NULL, score, ref){
+score_trivia <- function(data, n_round = 1, score = 2, ref, time_col = 1, team_col = 2){
 
   if (is.character(data)) data <- read_csv(construct_download_url(data))
 
-  data <- data %>%
-    mutate(timestamp = dmy_hms(data$`Carimbo de data/hora`),
-           team_name = data$`FILL OUT THE NAME OF YOUR TEAM:`)
+  names(data)[time_col] <- "timestamp"
+  names(data)[team_col] <- "team_name"
 
   # Checking if there's only one form per team
   ## if more than one, we'll pick the
@@ -53,7 +52,7 @@ score_trivia <- function(data, n_round = NULL, score, ref){
 
   }
 
-  res <- data.frame(team = data$team_name, score = rowSums(quest_res))
+  res <- data.frame(timestamp = data$timestamp, team = data$team_name, score = rowSums(quest_res), round = n_round)
 
   return(res)
 

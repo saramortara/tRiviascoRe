@@ -15,14 +15,24 @@ rank_teams <- function(res){
 
   score <- aggregate(score ~ team, data = res, FUN = sum, na.rm = TRUE)
 
+  score$timestamp = res$timestamp[res$round == max(res$round)]
+
   rank <- score[order(score$score, decreasing = TRUE), ]
+  rank <- rank[order(rank$timestamp), ]
+
+  rank$tie <- NA
+
+  # Checking for ties
+  for (i in 1:nrow(rank)) {
+    rank$tie[i] <- any(rank$score[i] == rank$score[-i])
+  }
 
   first <- rank[1, ]
   second <- rank[2, ]
   third <- rank[3, ]
 
-  message(info("Third place: ", third$team), note(" Score: ", third$score, " "), medal(3))
-  message(info("Second place: ", second$team), note(" Score: ", second$score, " "), medal(2))
-  message(info("Firt place: ", first$team), note(" Score: ", first$score, " "), medal(1))
+  message(info("Third place: ", third$team), note(" Score: ", third$score, " "), medal(3), ifelse(third$tie, "Tiebreaker by timestamp", ""))
+  message(info("Second place: ", second$team), note(" Score: ", second$score, " "), medal(2), ifelse(second$tie, "Tiebreaker by timestamp", ""))
+  message(info("First place: ", first$team), note(" Score: ", first$score, " "), medal(1), ifelse(second$tie, "Tiebreaker by timestamp", ""))
 
 }
