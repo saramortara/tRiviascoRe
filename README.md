@@ -41,7 +41,6 @@ data <- read_csv(construct_download_url(data))
     ## 'What is the name of this actor?_3' [6]
 
 ``` r
-data <- na.omit(data)
 # Vector of scores for each round
 score <- c(2, 3, 4, 10)
 ```

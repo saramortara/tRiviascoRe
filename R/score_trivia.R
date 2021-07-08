@@ -21,6 +21,10 @@ score_trivia <- function(data, n_round = 1, score = 2, ref, time_col = 1, team_c
   names(data)[time_col] <- "timestamp"
   names(data)[team_col] <- "team_name"
 
+  # Removing empty responses
+  data <- data[!is.na(data[, time_col]), ]
+  data <- data[!is.na(data[, team_col]), ]
+
   # Checking if there's only one form per team
   ## if more than one, we'll pick the
   last_form <- data %>%
@@ -52,7 +56,7 @@ score_trivia <- function(data, n_round = 1, score = 2, ref, time_col = 1, team_c
 
   }
 
-  res <- data.frame(timestamp = data$timestamp, team = data$team_name, score = rowSums(quest_res), round = n_round)
+  res <- data.frame(timestamp = data$timestamp, team = data$team_name, score = rowSums(quest_res, na.rm = TRUE), round = n_round)
 
   return(res)
 
