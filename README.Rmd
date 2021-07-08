@@ -40,8 +40,9 @@ Provide a path to spreadsheet that is the output of a google form
 data <- "https://docs.google.com/spreadsheets/d/1yDHG41aGnb2hEUEKo6gmsoeWIBaQuv6uf-tDE0J4XbI/edit?usp=sharing"
 data <- read_csv(construct_download_url(data))
 
+data <- na.omit(data)
 # Vector of scores for each round
-score = c(2, 3, 4, 10)
+score <- c(2, 3, 4, 10)
 
 ```
 
@@ -50,11 +51,11 @@ Provide a reference template with the answers
 
 ```{r}
 # Correct answers
-ref <- data.frame(question_name = names(select(data, starts_with("What"))),
-                  correct_answer = c("George Clooney", 
+ref <- data.frame(question_name = names(select(data, starts_with("What"))[-1]),
+                  correct_answer = c("Robert De Niro", 
                                      "Marlon Brando", 
-                                     "Al Pacino", 
-                                     "Robert De Niro"),
+                                     "George Clooney", 
+                                     "Al Pacino"),
                   round = c(1, 2, 3, 3))
 ```
 
@@ -69,11 +70,11 @@ for (j in unique(ref$round)) {
   ref_round <- filter(ref, round == j)
   n_round <- j
   score_val <- score[n_round]
-  score_list[[j]] <- score_trivia(data, n_round, score_val, ref)
+  score_list[[j]] <- score_trivia(data, n_round, score_val, ref_round)
   
 }
 
-score_list
+  score_list
 ```
 
 

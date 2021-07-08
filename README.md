@@ -41,19 +41,20 @@ data <- read_csv(construct_download_url(data))
     ## 'What is the name of this actor?_3' [6]
 
 ``` r
+data <- na.omit(data)
 # Vector of scores for each round
-score = c(2, 3, 4, 10)
+score <- c(2, 3, 4, 10)
 ```
 
 Provide a reference template with the answers
 
 ``` r
 # Correct answers
-ref <- data.frame(question_name = names(select(data, starts_with("What"))),
-                  correct_answer = c("George Clooney", 
+ref <- data.frame(question_name = names(select(data, starts_with("What"))[-1]),
+                  correct_answer = c("Robert De Niro", 
                                      "Marlon Brando", 
-                                     "Al Pacino", 
-                                     "Robert De Niro"),
+                                     "George Clooney", 
+                                     "Al Pacino"),
                   round = c(1, 2, 3, 3))
 ```
 
@@ -66,30 +67,30 @@ for (j in unique(ref$round)) {
   ref_round <- filter(ref, round == j)
   n_round <- j
   score_val <- score[n_round]
-  score_list[[j]] <- score_trivia(data, n_round, score_val, ref)
+  score_list[[j]] <- score_trivia(data, n_round, score_val, ref_round)
   
 }
 
-score_list
+  score_list
 ```
 
     ## [[1]]
-    ##                   team score
-    ## 1 ZOOM BREAKOUT ROOM 1     0
-    ## 2 ZOOM BREAKOUT ROOM 2     0
-    ## 3 ZOOM BREAKOUT ROOM 3     2
+    ##             timestamp            team score round
+    ## 1 02/07/2021 13:13:33 Carol the Great     2     1
+    ## 2 02/07/2021 13:13:47          Room 1     2     1
+    ## 3 02/07/2021 13:15:42       supeRuseR     0     1
     ## 
     ## [[2]]
-    ##                   team score
-    ## 1 ZOOM BREAKOUT ROOM 1     3
-    ## 2 ZOOM BREAKOUT ROOM 2     3
-    ## 3 ZOOM BREAKOUT ROOM 3     0
+    ##             timestamp            team score round
+    ## 1 02/07/2021 13:13:33 Carol the Great     3     2
+    ## 2 02/07/2021 13:13:47          Room 1     3     2
+    ## 3 02/07/2021 13:15:42       supeRuseR     0     2
     ## 
     ## [[3]]
-    ##                   team score
-    ## 1 ZOOM BREAKOUT ROOM 1     4
-    ## 2 ZOOM BREAKOUT ROOM 2     0
-    ## 3 ZOOM BREAKOUT ROOM 3     0
+    ##             timestamp            team score round
+    ## 1 02/07/2021 13:13:33 Carol the Great     8     3
+    ## 2 02/07/2021 13:13:47          Room 1     8     3
+    ## 3 02/07/2021 13:15:42       supeRuseR     0     3
 
 Binding the list into a single data frame
 
@@ -103,8 +104,8 @@ Getting the final score:
 rank_teams(res)
 ```
 
-    ## Third place: ZOOM BREAKOUT ROOM 3 Score: 2 🥉
+    ## Third place: supeRuseR Score: 0 🥉
 
-    ## Second place: ZOOM BREAKOUT ROOM 2 Score: 3 🥈
+    ## Second place: Room 1 Score: 13 🥈Tiebreaker by timestamp
 
-    ## Firt place: ZOOM BREAKOUT ROOM 1 Score: 7 🥇
+    ## First place: Carol the Great Score: 13 🥇Tiebreaker by timestamp
