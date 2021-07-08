@@ -6,17 +6,17 @@ output: github_document
 
 To install and load the package use:
 
-```{r, eval=F}
+```{r install, eval=F}
 remotes::install_github("saramortara/tRiviascoRe")
 library(tRiviascoRe)
 ```
 
-```{r, echo=F, message=FALSE}
+```{r load-dev, echo=F, message=FALSE}
 devtools::load_all()
 ```
 
 
-```{r, message=FALSE}
+```{r libs, message=FALSE}
 library(tidyr)
 library(dplyr)
 library(readr)
@@ -35,7 +35,7 @@ library(gsheet)
 
 Provide a path to spreadsheet that is the output of a google form
 
-```{r, message=F}
+```{r form, message=F}
 # Path to the google form
 data <- "https://docs.google.com/spreadsheets/d/1yDHG41aGnb2hEUEKo6gmsoeWIBaQuv6uf-tDE0J4XbI/edit?usp=sharing"
 data <- read_csv(construct_download_url(data))
@@ -49,7 +49,7 @@ score <- c(2, 3, 4, 10)
 
 Provide a reference template with the answers
 
-```{r}
+```{r ref}
 # Correct answers
 ref <- data.frame(question_name = names(select(data, starts_with("What"))[-1]),
                   correct_answer = c("Robert De Niro", 
@@ -63,7 +63,7 @@ ref <- data.frame(question_name = names(select(data, starts_with("What"))[-1]),
 
 Running the function to get the score for each team
 
-```{r}
+```{r score}
 score_list <- list()
 
 for (j in unique(ref$round)) {
@@ -80,15 +80,14 @@ for (j in unique(ref$round)) {
 
 Binding the list into a single data frame
 
-```{r}
+```{r bind}
 res <- bind_rows(score_list, .id = "round")
 ```
 
 
 Getting the final score:
 
-```{r}
+```{r rank}
 rank_teams(res)
-
 ```
 

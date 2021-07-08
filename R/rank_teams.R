@@ -17,12 +17,17 @@ rank_teams <- function(res){
 
   score$timestamp = res$timestamp[res$round == max(res$round)]
 
-  rank <- score[order(score$score, decreasing = TRUE), ]
-  rank <- rank[order(rank$timestamp), ]
+  score$order = -(score$score + 1)
 
+  rank <- score[order(score$order, score$timestamp), ]
+
+
+
+  # Checking for ties ----------------------------------------------------------
+
+  # The earliest response wins
   rank$tie <- NA
 
-  # Checking for ties
   for (i in 1:nrow(rank)) {
     rank$tie[i] <- any(rank$score[i] == rank$score[-i])
   }
@@ -30,6 +35,8 @@ rank_teams <- function(res){
   first <- rank[1, ]
   second <- rank[2, ]
   third <- rank[3, ]
+
+  # Announcing the winners -----------------------------------------------------
 
   message(info("Third place: ", third$team), note(" Score: ", third$score, " "), medal(3), ifelse(third$tie, "Tiebreaker by timestamp", ""))
   message(info("Second place: ", second$team), note(" Score: ", second$score, " "), medal(2), ifelse(second$tie, "Tiebreaker by timestamp", ""))
