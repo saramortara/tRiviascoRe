@@ -31,62 +31,85 @@ library(gsheet)
 
 3. The answers from the google form
 
-## Example
+## How we run the code
 
-Provide a path to spreadsheet that is the output of a google form
 
-```{r form, message=F}
-# Path to the google form
-data <- "https://docs.google.com/spreadsheets/d/1yDHG41aGnb2hEUEKo6gmsoeWIBaQuv6uf-tDE0J4XbI/edit?usp=sharing"
-data <- read_csv(construct_download_url(data))
+####  Reference table 
 
-# Vector of scores for each round
-score <- c(2, 3, 4, 10)
+```{r}
+ref_url <- "https://docs.google.com/spreadsheets/d/1uCPz4XFWUGd20-fVgXjIo59eWp31AREzTlXCuEN8Vn0/edit#gid=0"
+ref <- read_csv(construct_download_url(ref_url))
+
+# Score points vector
+score <- c(2, 3, 5, 10)
+```
+
+
+### Round 1
+
+```{r round1}
+
+url1 <- "https://docs.google.com/spreadsheets/d/1JqthtHHCFat1NdUUzM-9kyS-Vi789GFHywPu0eJ_5UE/edit#gid=1753062260"
+
+r1 <- read_csv(construct_download_url(url1))
+
+res1 <- score_trivia(r1, n_round = 1, score = score[1], ref)
+
+res1
+```
+
+### Round 2
+
+
+```{r round2}
+
+url2 <- "https://docs.google.com/spreadsheets/d/1H3V2DpZHbtY-TtOmyTVLWJXUEiPgMVdDisJGTQ2deB4/edit#gid=464947112"
+
+r2 <- read_csv(construct_download_url(url2))
+
+res2 <- score_trivia(r2, n_round = 2, score = score[2], ref)
+
+res2
+```
+
+
+### Round 3
+
+```{r round3}
+
+url3 <- "https://docs.google.com/spreadsheets/d/1blvK5r3WGHQbatNeqFt3H0nIVXPXYpaS_CYY6IiMRsU/edit?usp=sharing"
+
+r3 <- read_csv(construct_download_url(url3))
+
+
+res3 <- score_trivia(r3, n_round = 3, score = score[3], ref)
+
+res3
 
 ```
 
 
-Provide a reference template with the answers
+### Round 4 
 
-```{r ref}
-# Correct answers
-ref <- data.frame(question_name = names(select(data, starts_with("What"))[-1]),
-                  correct_answer = c("Robert De Niro", 
-                                     "Marlon Brando", 
-                                     "George Clooney", 
-                                     "Al Pacino"),
-                  round = c(1, 2, 3, 3))
+```{r}
+url4 <- "https://docs.google.com/spreadsheets/d/1FavTAbTzBqDXnBJTIjeKMY8bhLzUF8Kx9NSIgMczCuI/edit?usp=sharing"
+
+r4 <- read_csv(construct_download_url(url4))
+
+res4 <- score_trivia(r4, n_round = 4, score = score[4], ref)
+
+res4
 ```
 
 
+### Final Score ------------------------------------------------------------------
 
-Running the function to get the score for each team
+```{r final}
 
-```{r score}
-score_list <- list()
+score_list <- list(res1, res2, res3, res4)
 
-for (j in unique(ref$round)) {
-  ref_round <- filter(ref, round == j)
-  n_round <- j
-  score_val <- score[n_round]
-  score_list[[j]] <- score_trivia(data, n_round, score_val, ref_round)
-  
-}
+res <- bind_rows(score_list)
 
-  score_list
-```
-
-
-Binding the list into a single data frame
-
-```{r bind}
-res <- bind_rows(score_list, .id = "round")
-```
-
-
-Getting the final score:
-
-```{r rank}
 rank_teams(res)
 ```
 
